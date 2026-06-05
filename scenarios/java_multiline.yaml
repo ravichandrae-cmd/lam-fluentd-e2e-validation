@@ -1,0 +1,19 @@
+id: "java-multiline-001"
+name: "Java Multiline Stacktrace Validation"
+description: "Validate grouping of Java exception stacktraces."
+source_type: "java"
+baseline_agent: "google-fluentd"
+upstream_agent: "oss-fluentd-plugin"
+
+expected_log_name: "java-app"
+expected_resource_type: "gce_instance"
+expected_payload_type: "text"
+
+comparison_keys:
+  - "resource.type"
+  - "resource.labels"
+  - "textPayload"
+  - "severity"
+
+correlation_key: "textPayload"
+notes: "Tests Java specific multiline exceptions."

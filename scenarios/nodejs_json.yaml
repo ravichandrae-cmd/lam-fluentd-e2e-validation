@@ -1,0 +1,22 @@
+id: "nodejs-json-001"
+name: "Node.js Express JSON Validation"
+description: "Validate parsed JSON logs from Node.js Express apps (e.g. using Pino/Winston)."
+source_type: "nodejs"
+baseline_agent: "google-fluentd"
+upstream_agent: "oss-fluentd-plugin"
+
+expected_log_name: "nodejs-app"
+expected_resource_type: "gce_instance"
+expected_payload_type: "json"
+expected_fields:
+  - "req_id"
+  - "msg"
+
+comparison_keys:
+  - "resource.type"
+  - "jsonPayload.req_id"
+  - "jsonPayload.msg"
+  - "severity"
+
+correlation_key: "jsonPayload.req_id"
+notes: "Tests Nodejs specific JSON structures."

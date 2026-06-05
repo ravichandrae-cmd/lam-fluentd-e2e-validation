@@ -1,0 +1,17 @@
+id: "special-chars-001"
+name: "Special Characters Encoding Test"
+description: "Ensures Unicode, emojis, and special characters are preserved correctly."
+source_type: "generic"
+baseline_agent: "google-fluentd"
+upstream_agent: "oss-fluentd-plugin"
+
+expected_log_name: "encoding-test"
+expected_resource_type: "gce_instance"
+expected_payload_type: "text"
+
+comparison_keys:
+  - "resource.type"
+  - "textPayload"
+
+correlation_key: "textPayload"
+notes: "Log payload should contain complex unicode characters."

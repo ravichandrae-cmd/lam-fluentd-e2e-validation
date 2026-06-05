@@ -1,0 +1,30 @@
+id: "golang-gin-access-001"
+name: "Golang Gin Framework Access Logs Validation"
+description: "Validate parsed Gin HTTP access logs ensuring route, status, latency, and client details match."
+source_type: "golang"
+baseline_agent: "google-fluentd"
+upstream_agent: "oss-fluentd-plugin"
+
+expected_log_name: "ravi-golang-app"
+expected_resource_type: "gce_instance"
+expected_payload_type: "json"
+expected_fields:
+  - "method"
+  - "path"
+  - "status"
+
+comparison_keys:
+  - "resource.type"
+  - "resource.labels"
+  - "labels"
+  - "jsonPayload.method"
+  - "jsonPayload.path"
+  - "jsonPayload.status"
+  - "jsonPayload.client_ip"
+  - "jsonPayload.latency"
+  - "jsonPayload.user_agent"
+  - "jsonPayload.body_size"
+  - "severity"
+
+correlation_key: "jsonPayload.path"
+notes: "Verifies that standard HTTP access logs from Gin are parsed into a rich JSON structure and perfectly match between agents."

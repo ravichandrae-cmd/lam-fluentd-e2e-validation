@@ -1,0 +1,20 @@
+id: "golang-stderr-multiline-001"
+name: "Golang Stderr Multiline Stacktrace Validation"
+description: "Ensure multi-line stacktraces from Golang panics or errors are grouped and ingested correctly."
+source_type: "golang"
+baseline_agent: "google-fluentd"
+upstream_agent: "oss-fluentd-plugin"
+
+expected_log_name: "ravi-golang-app"
+expected_resource_type: "gce_instance"
+expected_payload_type: "text"
+
+comparison_keys:
+  - "resource.type"
+  - "resource.labels"
+  - "labels"
+  - "textPayload"
+  - "severity"
+
+correlation_key: "textPayload"
+notes: "Verifies that the fluentd multiline parser correctly merges panic stacktraces into a single log entry."

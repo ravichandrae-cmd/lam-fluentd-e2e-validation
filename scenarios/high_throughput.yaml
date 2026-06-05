@@ -1,0 +1,20 @@
+id: "high-throughput-001"
+name: "High Throughput Load Test"
+description: "Verify agent stability under heavy load without dropping logs."
+source_type: "generic"
+baseline_agent: "google-fluentd"
+upstream_agent: "oss-fluentd-plugin"
+
+expected_log_name: "load-test"
+expected_resource_type: "gce_instance"
+expected_payload_type: "json"
+expected_fields:
+  - "batch_id"
+  - "message_id"
+
+comparison_keys:
+  - "jsonPayload.batch_id"
+  - "jsonPayload.message_id"
+
+correlation_key: "jsonPayload.message_id"
+notes: "Checks for 0 lost logs out of thousands."

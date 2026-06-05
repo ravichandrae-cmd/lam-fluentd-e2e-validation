@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+
+# Local logs, reports, and generated data
+outputs/
+
+# Secrets and configs
+.env
+secret*
+credentials.json
+*.key
+*.pem

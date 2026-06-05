@@ -1,0 +1,31 @@
+id: "golang-structured-logging-001"
+name: "Golang slog JSON Validation"
+description: "Ensure exact parity between baseline and upstream plugins for native JSON payloads with severity hoisting."
+source_type: "golang"
+baseline_agent: "google-fluentd"
+upstream_agent: "oss-fluentd-plugin"
+
+expected_log_name: "ravi-golang-app"
+expected_resource_type: "gce_instance"
+expected_payload_type: "json"
+expected_fields:
+  - "message"
+
+comparison_keys:
+  - "resource.type"
+  - "resource.labels"
+  - "labels"
+  - "jsonPayload.message"
+  - "jsonPayload.component"
+  - "jsonPayload.status"
+  - "jsonPayload.latency"
+  - "jsonPayload.path"
+  - "jsonPayload.remote_ip"
+  - "jsonPayload.method"
+  - "jsonPayload.version"
+  - "jsonPayload.error"
+  - "jsonPayload.user_id"
+  - "severity"
+
+correlation_key: "jsonPayload.message"
+notes: "Verifies that Go's slog output retains integer and duration types, and that severity is correctly hoisted."
