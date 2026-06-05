@@ -1,0 +1,19 @@
+id: "log-rotation-001"
+name: "Log Rotation Test"
+description: "Verify that rotating logs does not cause missing or duplicate entries."
+source_type: "generic"
+baseline_agent: "google-fluentd"
+upstream_agent: "oss-fluentd-plugin"
+
+expected_log_name: "rotation-test"
+expected_resource_type: "gce_instance"
+expected_payload_type: "json"
+expected_fields:
+  - "sequence_id"
+
+comparison_keys:
+  - "resource.type"
+  - "jsonPayload.sequence_id"
+
+correlation_key: "jsonPayload.sequence_id"
+notes: "Used alongside a log generator that rapidly creates/deletes log files."

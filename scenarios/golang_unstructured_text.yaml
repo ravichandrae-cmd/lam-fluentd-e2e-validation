@@ -1,0 +1,20 @@
+id: "golang-unstructured-text-001"
+name: "Golang Unstructured Text Validation"
+description: "Validate standard library 'log' package output (unstructured text) parity between agents."
+source_type: "golang"
+baseline_agent: "google-fluentd"
+upstream_agent: "oss-fluentd-plugin"
+
+expected_log_name: "ravi-golang-app"
+expected_resource_type: "gce_instance"
+expected_payload_type: "text"
+
+comparison_keys:
+  - "resource.type"
+  - "resource.labels"
+  - "labels"
+  - "textPayload"
+  - "severity"
+
+correlation_key: "textPayload"
+notes: "Verifies that unstructured plain text logs are captured as textPayload without being misparsed."
