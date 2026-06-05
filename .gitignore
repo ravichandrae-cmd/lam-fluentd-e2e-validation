@@ -3,7 +3,14 @@ __pycache__/
 *.pyc
 
 # Local logs, reports, and generated data
-outputs/
+outputs/baseline/*
+outputs/upstream/*
+outputs/reports/*
+
+# Ensure directories exist in git by keeping the hidden gitkeep files
+!outputs/baseline/.gitkeep
+!outputs/upstream/.gitkeep
+!outputs/reports/.gitkeep
 
 # Secrets and configs
 .env
