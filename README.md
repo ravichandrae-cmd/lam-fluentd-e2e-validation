@@ -20,7 +20,7 @@ A framework for validating exact log parity between `google-fluentd` and the new
 To compare a set of exported logs against a scenario schema:
 
 ```bash
-python scripts/compare_logs.py \
+python3 scripts/compare_logs.py \
   --scenario scenarios/golang_slog_json.yaml \
   --baseline outputs/baseline/golang.json \
   --upstream outputs/upstream/golang.json
@@ -40,7 +40,7 @@ It saves a JSON validation result under `outputs/reports/`.
 Once you have generated one or more JSON reports, you can compile them into an easy-to-read markdown file.
 
 ```bash
-python scripts/report.py
+python3 scripts/report.py
 ```
 This produces a `outputs/reports/summary.md` detailing the pass/fail status and matched discrepancies of all test runs.
 
@@ -49,7 +49,7 @@ This produces a `outputs/reports/summary.md` detailing the pass/fail status and 
 You can use the placeholder exporter to pull logs from GCP, ensuring you do not hardcode your Project IDs or credentials.
 
 ```bash
-python scripts/export_logs.py \
+python3 scripts/export_logs.py \
   --project my-gcp-project-id \
   --log-name ravi-golang-app \
   --output outputs/baseline/golang.json

@@ -156,15 +156,30 @@ def main():
     with open(out_file, 'w') as f:
         json.dump(report, f, indent=2)
         
-    print(f"\n--- E2E VALIDATION: {report['scenario']} ---")
-    print(f"Status: {report['status']}")
-    print(f"Baseline Logs: {len(b_logs)} | Upstream Logs: {len(u_logs)}")
+    print(f"\n=== E2E VALIDATION: {report['scenario']} ===")
+    status_color = "\033[92m" if report['status'] == "PASS" else "\033[91m"
+    status_icon = "✅" if report['status'] == "PASS" else "❌"
+    print(f"{status_icon} Status: {status_color}{report['status']}\033[0m")
+    print(f"Logs Checked: Baseline ({len(b_logs)}) 🆚 Upstream ({len(u_logs)})")
+    
+    if report["missing_in_upstream"] or report["extra_in_upstream"]:
+        print(f"Missing: {report['missing_in_upstream']} | Extra: {report['extra_in_upstream']}")
+
     if integrity_errors:
-        print(f"Integrity Errors ({len(integrity_errors)}):")
-        for e in integrity_errors[:5]: print(f"  - {e}")
+        print(f"\n⚠️  Integrity Errors ({len(integrity_errors)}):")
+        for e in integrity_errors[:5]: print(f"  - 🔴 {e}")
+        if len(integrity_errors) > 5:
+            print(f"  ... and {len(integrity_errors) - 5} more.")
+            
     if report["mismatches"]:
-        print(f"Mismatches in {len(report['mismatches'])} logs.")
-    print(f"Report saved to {out_file}\n")
+        print(f"\n🔍 Mismatches Found in {len(report['mismatches'])} logs:")
+        for m in report["mismatches"][:3]:
+            ident = m.get("correlation", f"Index {m.get('index')}")
+            print(f"  - 🧩 Log {ident} has {len(m['diffs'])} field difference(s)")
+        if len(report["mismatches"]) > 3:
+            print(f"  ... and {len(report['mismatches']) - 3} more logs.")
+            
+    print(f"\n📝 Full Report saved to: {out_file}\n")
     sys.exit(1 if report["status"] == "FAIL" else 0)
 
 if __name__ == "__main__":
