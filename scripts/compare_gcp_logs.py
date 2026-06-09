@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 
 # Add the current directory to sys.path to import from compare_logs.py
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from compare_logs import load_scenario, check_integrity, compare_entries, get_nested
+from compare_logs import load_scenario, check_integrity, compare_entries, get_nested, normalize_text
 
 def fetch_logs(project, log_name, extra_filter=None, freshness=None, start_time=None, end_time=None):
     print(f"Fetching logs from project '{project}' with logName '{log_name}'...")
@@ -79,8 +79,8 @@ def main():
 
     
     if corr_key:
-        b_dict = {str(get_nested(l, corr_key)): l for l in b_logs if get_nested(l, corr_key) is not None}
-        u_dict = {str(get_nested(l, corr_key)): l for l in u_logs if get_nested(l, corr_key) is not None}
+        b_dict = {str(normalize_text(get_nested(l, corr_key))): l for l in b_logs if get_nested(l, corr_key) is not None}
+        u_dict = {str(normalize_text(get_nested(l, corr_key))): l for l in u_logs if get_nested(l, corr_key) is not None}
         
         all_corr = sorted(set(b_dict.keys()) | set(u_dict.keys()))
         for k in all_corr:

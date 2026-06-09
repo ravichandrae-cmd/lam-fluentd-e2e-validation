@@ -3,6 +3,7 @@ import argparse
 import json
 import os
 import sys
+import re
 from datetime import datetime, timezone
 import yaml
 
@@ -36,6 +37,12 @@ def get_nested(d, path):
         if isinstance(d, dict) and p in d: d = d.get(p)
         else: return None
     return d
+
+def normalize_text(val):
+    if isinstance(val, str):
+        # Remove timestamp prefixes like '2026-06-09T21:31:06+0000 '
+        return re.sub(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[^\s]*\s+', '', val)
+    return val
 
 def check_integrity(logs, scenario, agent_name):
     errors = []
@@ -86,8 +93,8 @@ def check_integrity(logs, scenario, agent_name):
     return errors
 
 def compare_entries(baseline, upstream, keys):
-    b_norm = {k: get_nested(baseline, k) for k in keys if get_nested(baseline, k) is not None}
-    u_norm = {k: get_nested(upstream, k) for k in keys if get_nested(upstream, k) is not None}
+    b_norm = {k: normalize_text(get_nested(baseline, k)) for k in keys if get_nested(baseline, k) is not None}
+    u_norm = {k: normalize_text(get_nested(upstream, k)) for k in keys if get_nested(upstream, k) is not None}
     
     diffs = {}
     for k in set(b_norm.keys()) | set(u_norm.keys()):
@@ -128,8 +135,8 @@ def main():
     corr_key = scenario.get("correlation_key")
     
     if corr_key:
-        b_dict = {str(get_nested(l, corr_key)): l for l in b_logs if get_nested(l, corr_key) is not None}
-        u_dict = {str(get_nested(l, corr_key)): l for l in u_logs if get_nested(l, corr_key) is not None}
+        b_dict = {str(normalize_text(get_nested(l, corr_key))): l for l in b_logs if get_nested(l, corr_key) is not None}
+        u_dict = {str(normalize_text(get_nested(l, corr_key))): l for l in u_logs if get_nested(l, corr_key) is not None}
         
         all_corr = sorted(set(b_dict.keys()) | set(u_dict.keys()))
         for k in all_corr:
