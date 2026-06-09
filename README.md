@@ -44,15 +44,32 @@ python3 scripts/report.py
 ```
 This produces a `outputs/reports/summary.md` detailing the pass/fail status and matched discrepancies of all test runs.
 
-### 3. Export Logs (WIP)
+### 3. Export Logs
 
-You can use the placeholder exporter to pull logs from GCP, ensuring you do not hardcode your Project IDs or credentials.
+You can use the exporter to pull logs from GCP, ensuring you do not hardcode your Project IDs or credentials. It relies on your local gcloud CLI authentication.
 
 ```bash
 python3 scripts/export_logs.py \
   --project my-gcp-project-id \
   --log-name ravi-golang-app \
+  --freshness 1h \
   --output outputs/baseline/golang.json
+```
+
+### 4. Direct GCP Memory Comparison
+
+If you want to skip exporting files entirely, you can query and compare GCP logs directly in memory. This is especially useful if your baseline and upstream logs were generated at completely different times, as you can specify exact time boundaries for each:
+
+```bash
+python3 scripts/compare_gcp_logs.py \
+  --project my-gcp-project-id \
+  --baseline-log-name ravi-golang-app \
+  --upstream-log-name ravi-golang-app-upstream \
+  --scenario scenarios/golang_slog_json.yaml \
+  --baseline-start "2026-06-04T20:04:28.047931762Z" \
+  --baseline-end "2026-06-04T20:04:31.050529758Z" \
+  --upstream-start "2026-06-08T21:29:19.747187282Z" \
+  --upstream-end "2026-06-08T21:29:22.749277045Z"
 ```
 
 ## Adding New Scenarios
