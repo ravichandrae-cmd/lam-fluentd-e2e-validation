@@ -1,0 +1,30 @@
+id: "fp-kmf-02"
+name: "Kubernetes payload filtering"
+description: "Kubernetes payload filtering (skip_*_labels, skip_*_metadata, skip_master_url, include_ownerrefs_metadata)"
+source_type: "kubernetes"
+baseline_agent: "google-fluentd"
+upstream_agent: "oss-fluentd-plugin"
+
+expected_log_name: "kubernetes.kmf-test"
+expected_resource_type: "gce_instance"
+expected_payload_type: "json"
+expected_fields:
+  - "level"
+  - "message"
+  - "scenario"
+  - "stream"
+  - "system"
+
+comparison_keys:
+  - "resource.type"
+  - "resource.labels.instance_id"
+  - "resource.labels.project_id"
+  - "resource.labels.zone"
+  - "labels.compute.googleapis.com/resource_name"
+  - "jsonPayload.level"
+  - "jsonPayload.message"
+  - "jsonPayload.scenario"
+  - "jsonPayload.stream"
+  - "jsonPayload.system"
+
+notes: "Validates Kubernetes payload filtering where certain labels and metadata are skipped."
